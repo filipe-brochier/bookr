@@ -6,7 +6,7 @@ services:
       target: development
     command: pnpm run start:dev reservations
     ports:
-      - '4444:4444'
+      - '3000:3000'
     volumes:
       - .:/usr/src/app
   mongo:
