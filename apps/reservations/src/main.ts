@@ -2,7 +2,10 @@ import { NestFactory } from '@nestjs/core';
 import { ReservationsModule } from './reservations.module';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -22,6 +25,6 @@ async function bootstrap() {
 
   app.useLogger(app.get(Logger));
 
-  await app.listen(3000, '0.0.0.0'); // Ouvindo em todas as interfaces de rede
+  await app.listen(3000, '0.0.0.0');
 }
 bootstrap();
