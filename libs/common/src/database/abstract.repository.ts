@@ -9,6 +9,22 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     /* */
   }
 
+  protected toObjectId(id: string): Types.ObjectId {
+    return new Types.ObjectId(id);
+  }
+
+  protected processFilterQuery(
+    filterQuery: QueryFilter<TDocument>,
+  ): QueryFilter<TDocument> {
+    if (filterQuery._id && typeof filterQuery._id === 'string') {
+      return {
+        ...filterQuery,
+        _id: this.toObjectId(filterQuery._id),
+      };
+    }
+    return filterQuery;
+  }
+
   async create(document: Omit<TDocument, '_id'>): Promise<TDocument> {
     const createdDocument = new this.model({
       ...document,
@@ -23,8 +39,10 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
   }
 
   async findOne(filterQuery: QueryFilter<TDocument>): Promise<TDocument> {
+    const processedFilterQuery = this.processFilterQuery(filterQuery);
+
     const document = await this.model
-      .findOne(filterQuery)
+      .findOne(processedFilterQuery)
       .lean<TDocument>(true);
 
     if (!document) {
@@ -41,8 +59,10 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     filterQuery: QueryFilter<TDocument>,
     update: UpdateQuery<TDocument>,
   ): Promise<TDocument> {
+    const processedFilterQuery = this.processFilterQuery(filterQuery);
+
     const document = await this.model
-      .findOneAndUpdate(filterQuery, update, { new: true })
+      .findOneAndUpdate(processedFilterQuery, update, { new: true })
       .lean<TDocument>(true);
 
     if (!document) {
@@ -56,8 +76,10 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
   }
 
   async find(filterQuery: QueryFilter<TDocument>): Promise<TDocument[]> {
+    const processedFilterQuery = this.processFilterQuery(filterQuery);
+
     const documents = await this.model
-      .find(filterQuery)
+      .find(processedFilterQuery)
       .lean<TDocument[]>(true);
 
     return documents;
@@ -66,8 +88,10 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
   async findOneAndDelete(
     filterQuery: QueryFilter<TDocument>,
   ): Promise<TDocument> {
+    const processedFilterQuery = this.processFilterQuery(filterQuery);
+
     const document = await this.model
-      .findOneAndDelete(filterQuery)
+      .findOneAndDelete(processedFilterQuery)
       .lean<TDocument>(true);
 
     if (!document) {
