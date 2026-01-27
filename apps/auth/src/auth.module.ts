@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LocalStrategy } from './strategies/local.strategy';
 import z from 'zod';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 const configSchema = z.object({
   MONGODB_URI: z.url(),
@@ -35,7 +36,7 @@ const configSchema = z.object({
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
 })
 export class AuthModule {
   /* */
