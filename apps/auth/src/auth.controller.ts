@@ -3,8 +3,9 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CurrentUser } from './current-user.decorator';
 import { UserDocument } from './users/models/user.schema';
+import { type Response } from 'express';
 
-@Controller()
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {
     /* */
@@ -12,11 +13,11 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(
+  login(
     @CurrentUser() user: UserDocument,
     @Res({ passthrough: true }) response: Response,
   ) {
-    await this.authService.login(user, response);
-    // response.send(user)
+    this.authService.login(user, response);
+    response.send(user);
   }
 }

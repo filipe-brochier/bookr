@@ -12,7 +12,7 @@ export class AuthService {
   ) {
     /* */
   }
-  async login(user: UserDocument, response: Response) {
+  login(user: UserDocument, response: Response) {
     const tokenPayload = {
       userId: user._id.toHexString(),
     };
