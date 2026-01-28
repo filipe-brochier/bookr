@@ -49,21 +49,23 @@ describe('ReservationsService', () => {
       invoiceId: 'invoice-456',
     };
 
+    const userId = '123';
+
     const createdReservation = {
       _id: 'reservation-1',
       ...createReservationDto,
       timestamp: new Date('2024-01-01T01:00:00.000Z'),
-      userId: '123',
+      userId,
     };
 
     reservationsRepository.create.mockResolvedValue(createdReservation);
 
-    const result = await service.create(createReservationDto);
+    const result = await service.create(createReservationDto, userId);
 
     expect(reservationsRepository.create).toHaveBeenCalledWith({
       ...createReservationDto,
       timestamp: expect.any(Date) as unknown as Date,
-      userId: '123',
+      userId,
     });
     expect(result).toBe(createdReservation);
   });
@@ -76,10 +78,14 @@ describe('ReservationsService', () => {
       invoiceId: 'invoice-456',
     };
 
+    const userId = '123';
+
     const error = new Error('create failed');
     reservationsRepository.create.mockRejectedValue(error);
 
-    await expect(service.create(createReservationDto)).rejects.toBe(error);
+    await expect(service.create(createReservationDto, userId)).rejects.toBe(
+      error,
+    );
   });
 
   it('returns all reservations', async () => {

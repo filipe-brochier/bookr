@@ -29,7 +29,6 @@ export class AuthService {
     response.cookie('Authentication', token, {
       httpOnly: true,
       expires,
-      secure: this.configService.get<boolean>('IS_PRODUCTION'),
     });
   }
 }
