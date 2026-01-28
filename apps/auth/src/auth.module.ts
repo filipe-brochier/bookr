@@ -13,7 +13,8 @@ const configSchema = z.object({
   MONGODB_URI: z.url(),
   JWT_SECRET: z.string().min(1),
   JWT_EXPIRATION: z.string().regex(/^\d+$/).transform(Number),
-  PORT: z.coerce.number(),
+  HTTP_PORT: z.coerce.number(),
+  TCP_PORT: z.coerce.number(),
 });
 
 @Module({
