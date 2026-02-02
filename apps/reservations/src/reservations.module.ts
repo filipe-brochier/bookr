@@ -15,6 +15,10 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 const configSchema = z.object({
   MONGODB_URI: z.url(),
   PORT: z.coerce.number(),
+  AUTH_HOST: z.string(),
+  AUTH_PORT: z.coerce.number(),
+  PAYMENTS_HOST: z.string(),
+  PAYMENTS_PORT: z.coerce.number(),
 });
 
 @Module({
